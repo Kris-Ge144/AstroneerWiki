@@ -120,4 +120,35 @@ public class StartMenuView extends JFrame {
 			StartMenuView.getInstance().setVisible(true);
 		});
 	}
+	// Getter & Setter
+
+	public JPanel getContentPanel() {
+		return contentPanel;
+	}
+
+	public void setContentPanel(JPanel contentPanel) {
+		this.contentPanel = contentPanel;
+	}
+
+	public CardLayout getCardLayout() {
+		return cardLayout;
+	}
+
+	public void setCardLayout(CardLayout cardLayout) {
+		this.cardLayout = cardLayout;
+	}
+
+	public MenuController getController() {
+		return controller;
+	}
+
+	public void setController(MenuController controller) {
+		this.controller = controller;
+	}
+
+	public static void setInstance(StartMenuView instance) {
+		StartMenuView.instance = instance;
+	}
+	
+	
 }
