@@ -1,6 +1,7 @@
 package AstroneerWiki.View;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.Font;
 
 import javax.swing.JButton;
@@ -8,66 +9,111 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class StartMenuView extends JFrame{
-	private JLabel appTitleLbl;
-	private JPanel buttonPnl, appTitlePnl;
-	private JButton planetMenuBtn, resourceMenuBtn, vehicleMenuBtn, baseBuildingMenuBtn,
-					toolsEquipmentMenuBtn, researchMenuBtn, hazardsFaunaMenuBtn, cosmeticsMenuBtn, exitAppBtn;
-	private static StartMenuView instance;
+import AstroneerWiki.Controller.MenuController;
+
+public class StartMenuView extends JFrame {
 	
-	// Konstruktor
+	private static StartMenuView instance;
+	private JPanel contentPanel;
+	private CardLayout cardLayout;
+	private MenuController controller;
+	
+	// Singleton
 	private StartMenuView() {
 		setTitle("Astroneer Wiki");
 		setSize(1920, 1080);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
-	// Panels
-		buttonPnl = new JPanel();
-		appTitlePnl = new JPanel();
+		// CardLayout für alle Views
+		cardLayout = new CardLayout();
+		contentPanel = new JPanel(cardLayout);
+		add(contentPanel, BorderLayout.CENTER);
 		
-	// Label
-		appTitleLbl = new JLabel("Astroneer Wiki");
+		// Controller initialisieren und ihm dieese View übergeben
+		controller = new MenuController(this);
+		
+		// Startmenü-Panel erstellen
+		JPanel startMenuPanel = createStartMenuPanel();
+		
+		// Panels registrieren
+		contentPanel.add(startMenuPanel,"StartMenu");
+		
+		// weitere Views registrieren
+		contentPanel.add(new PlanetView(this, controller),"PlanetView");
+		contentPanel.add(new VehicleView(this, controller),"VehicleView");
+		contentPanel.add(new ResourceView(this, controller),"ResourceView");
+		contentPanel.add(new BaseBuildingView(this, controller),"BaseBuildingView");
+		contentPanel.add(new ToolEquipmentView(this, controller),"ToolEquipmentView");
+		contentPanel.add(new ResearchView(this, controller),"ResearchView");
+		contentPanel.add(new HazardFaunaView(this, controller),"HazardFaunaView");
+		contentPanel.add(new CosmeticView(this, controller),"CosmeticView");
+		
+		// Standartmäßig Startmenü anzeigen
+		showCard("StartMenu");
+	}
+	
+	// Erzeugt das Startmenü-Panel mit allen Buttons
+	private JPanel createStartMenuPanel() {
+		JPanel panel = new JPanel(new BorderLayout());
+		
+		// Titel
+		JLabel appTitleLbl = new JLabel("Astroneer Wiki", JLabel.CENTER);
 		appTitleLbl.setFont(new Font("Arial", Font.BOLD, 32));
-		appTitlePnl.add(appTitleLbl);
+		panel.add(appTitleLbl, BorderLayout.NORTH);
 		
-	// Buttons
-		planetMenuBtn = new JButton("Planets");
-		resourceMenuBtn = new JButton("Resources");
-		vehicleMenuBtn = new JButton("Vehicles");
-		baseBuildingMenuBtn = new JButton("Bases & Buildings");
-		toolsEquipmentMenuBtn = new JButton("Tools & Equipment");
-		researchMenuBtn = new JButton("Research & Bytes");
-		hazardsFaunaMenuBtn = new JButton("Hazards & Fauna");
-		cosmeticsMenuBtn = new JButton("Cosmetics");
-		exitAppBtn = new JButton("Exit");
+		// Button-Leiste
+		JPanel buttonPnl = new JPanel();
 		
-	// Buttons zum Panel hinzufügen
+		JButton planetMenuBtn = new JButton("Planets");
+		JButton resourceMenuBtn = new JButton("Resources");
+		JButton vehicleMenuBtn = new JButton("Vehicles");
+		JButton baseBuildingMenuBtn = new JButton("Bases & Buildings");
+		JButton toolEquipmentMenuBtn = new JButton("Tools & Equipment");
+		JButton researchMenuBtn = new JButton("Research & Bytes");
+		JButton hazardFaunaMenuBtn = new JButton("Hazards & Fauna");
+		JButton cosmeticMenuBtn = new JButton("Cosmetics");
+		JButton exitAppBtn = new JButton("Exit");
+		
+		// Buttons hinzufügen
 		buttonPnl.add(planetMenuBtn);
 		buttonPnl.add(resourceMenuBtn);
 		buttonPnl.add(vehicleMenuBtn);
 		buttonPnl.add(baseBuildingMenuBtn);
-		buttonPnl.add(toolsEquipmentMenuBtn);
+		buttonPnl.add(toolEquipmentMenuBtn);
 		buttonPnl.add(researchMenuBtn);
-		buttonPnl.add(hazardsFaunaMenuBtn);
-		buttonPnl.add(cosmeticsMenuBtn);
+		buttonPnl.add(hazardFaunaMenuBtn);
+		buttonPnl.add(cosmeticMenuBtn);
 		buttonPnl.add(exitAppBtn);
 		
-	// Panels zum Frame hinzufügen
-		add(appTitlePnl, BorderLayout.NORTH);
-		add(buttonPnl, BorderLayout.CENTER);
-	
+		// Aktionen der Buttons über den Controller steuern
+		planetMenuBtn.addActionListener(e -> controller.showView("PlanetView"));
+		resourceMenuBtn.addActionListener(e -> controller.showView("ResourceView"));
+		vehicleMenuBtn.addActionListener(e -> controller.showView("VehicleView"));
+		baseBuildingMenuBtn.addActionListener(e -> controller.showView("BaseBuildingView"));
+		toolEquipmentMenuBtn.addActionListener(e -> controller.showView("ToolEquipmentView"));
+		researchMenuBtn.addActionListener(e -> controller.showView("ResearchView"));
+		hazardFaunaMenuBtn.addActionListener(e -> controller.showView("HazardFaunaView"));
+		cosmeticMenuBtn.addActionListener(e -> controller.showView("CosmeticView"));
+		exitAppBtn.addActionListener(e -> System.exit(0));
+		
+		panel.add(buttonPnl, BorderLayout.CENTER);
+		
+		return panel;
 	}
 	
-	// Getter
+	// Methode, um Panels zu wechseln
+	public void showCard(String name) {
+		cardLayout.show(contentPanel, name);
+	}
 	
+	// Singleton Getter
 	public static StartMenuView getInstance() {
 		if (instance == null) {
 			instance = new StartMenuView();
 		}
 		return instance;
-		
 	}
-
+	
 	// Main zum Testen
 	public static void main(String[] args) {
 		javax.swing.SwingUtilities.invokeLater(() -> {
