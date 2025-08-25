@@ -80,8 +80,8 @@ public class StartMenuView extends JFrame {
         panel.setOpaque(false);
 
         // Titel
-        JLabel appTitleLbl = new JLabel("Astroneer Wiki", JLabel.CENTER);
-        appTitleLbl.setFont(new Font("Arial", Font.BOLD, 32));
+        JLabel appTitleLbl = new JLabel("Wiki", JLabel.CENTER);
+        appTitleLbl.setFont(new Font("bdastroneer.ttf", Font.BOLD, 32));
         panel.add(appTitleLbl, BorderLayout.NORTH);
 
         // Button-Leiste
