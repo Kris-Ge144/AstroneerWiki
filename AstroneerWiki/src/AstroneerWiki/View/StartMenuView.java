@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import AstroneerWiki.Controller.MenuController;
 import AstroneerWiki.Util.FontLoader;
@@ -28,7 +29,10 @@ public class StartMenuView extends JFrame {
         setTitle("Astroneer Wiki");
         setSize(1920, 1080);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setFont(FontLoader.getCustomFont(48f));
+        
+        // Custom Font für gesa
+        UIManager.put("Button.font", FontLoader.getCustomFont(20f));
+        UIManager.put("Label.font", FontLoader.getCustomFont(16f));
 
         // Hintergrundbild laden mit Debug
         java.net.URL url = getClass().getResource("/img/background/StartMenuBg.jpg");
@@ -111,18 +115,6 @@ public class StartMenuView extends JFrame {
         buttonPnl.add(cosmeticMenuBtn);
         buttonPnl.add(exitAppBtn);
         
-        // Button-Font
-        planetMenuBtn.setFont(FontLoader.getCustomFont(20f));
-        resourceMenuBtn.setFont(FontLoader.getCustomFont(20f));
-        vehicleMenuBtn.setFont(FontLoader.getCustomFont(20f));
-        baseBuildingMenuBtn.setFont(FontLoader.getCustomFont(20f));
-        toolEquipmentMenuBtn.setFont(FontLoader.getCustomFont(20f));
-        researchMenuBtn.setFont(FontLoader.getCustomFont(20f));
-        hazardFaunaMenuBtn.setFont(FontLoader.getCustomFont(20f));
-        cosmeticMenuBtn.setFont(FontLoader.getCustomFont(20f));
-        exitAppBtn.setFont(FontLoader.getCustomFont(20f));
-        
-
         // Aktionen
         planetMenuBtn.addActionListener(e -> controller.showView("PlanetView"));
         resourceMenuBtn.addActionListener(e -> controller.showView("ResourceView"));
