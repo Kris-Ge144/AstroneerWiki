@@ -4,8 +4,10 @@ import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.GridLayout;
 import java.awt.Image;
 
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import AstroneerWiki.Controller.MenuController;
+import AstroneerWiki.Util.ButtonLoader;
 import AstroneerWiki.Util.FontLoader;
 
 public class StartMenuView extends JFrame {
@@ -23,6 +26,18 @@ public class StartMenuView extends JFrame {
     private CardLayout cardLayout;
     private MenuController controller;
 
+    // Buttons
+    private ButtonLoader planetMenuBtn;
+    private ButtonLoader resourceMenuBtn;
+    private ButtonLoader vehicleMenuBtn;
+    private ButtonLoader baseBuildingMenuBtn;
+    private ButtonLoader toolEquipmentMenuBtn;
+    private ButtonLoader researchMenuBtn;
+    private ButtonLoader hazardFaunaMenuBtn;
+    private ButtonLoader cosmeticMenuBtn;
+    private ButtonLoader exitAppBtn;
+    
+    
     // Singleton
     private StartMenuView() {
         setTitle("Astroneer Wiki");
@@ -83,19 +98,20 @@ public class StartMenuView extends JFrame {
         panel.add(appTitleLbl, BorderLayout.NORTH);
 
         // Button-Leiste
-        JPanel buttonPnl = new JPanel();
+        JPanel buttonPnl = new JPanel(new GridLayout(1, 4, 10, 10));
         buttonPnl.setOpaque(false);
-
-        JButton planetMenuBtn = new JButton("Planets");
-        JButton resourceMenuBtn = new JButton("Resources");
-        JButton vehicleMenuBtn = new JButton("Vehicles");
-        JButton baseBuildingMenuBtn = new JButton("Bases & Buildings");
-        JButton toolEquipmentMenuBtn = new JButton("Tools & Equipment");
-        JButton researchMenuBtn = new JButton("Research & Bytes");
-        JButton hazardFaunaMenuBtn = new JButton("Hazards & Fauna");
-        JButton cosmeticMenuBtn = new JButton("Cosmetics");
-        JButton exitAppBtn = new JButton("Exit");
-
+        buttonPnl.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        
+        planetMenuBtn = new ButtonLoader("Planets","/img/backgroundButton/PlanetButtonBg.png");
+        resourceMenuBtn = new ButtonLoader("Resources","/img/backgroundButton/ResourceButtonBg.png");
+        vehicleMenuBtn = new ButtonLoader("Vehicles","/img/backgroundButton/VehicleButtonBg.png");
+        baseBuildingMenuBtn = new ButtonLoader("Bases & Buildings","/img/backgroundButton/BaseBuildingButtonBg.jpg");
+        toolEquipmentMenuBtn = new ButtonLoader("Tools & Equipment","/img/backgroundButton/ToolEquipmentButtonBg.png");
+        researchMenuBtn = new ButtonLoader("Research & Bytes","/img/backgroundButton/ResearchButtonBg.jpg");
+        hazardFaunaMenuBtn = new ButtonLoader("Hazards & Fauna","/img/backgroundButton/HazardFaunaButtonBg.jpg");
+        cosmeticMenuBtn = new ButtonLoader("Cosmetics","/img/backgroundButton/CosmeticButtonBg.jpg");
+        exitAppBtn = new ButtonLoader("Exit","/img/backgroundButton/ExitButtonBg.jpg");
+        
         // Buttons hinzufügen
         buttonPnl.add(planetMenuBtn);
         buttonPnl.add(resourceMenuBtn);
@@ -105,6 +121,7 @@ public class StartMenuView extends JFrame {
         buttonPnl.add(researchMenuBtn);
         buttonPnl.add(hazardFaunaMenuBtn);
         buttonPnl.add(cosmeticMenuBtn);
+        
         buttonPnl.add(exitAppBtn);
 
         // Aktionen
@@ -117,8 +134,9 @@ public class StartMenuView extends JFrame {
         hazardFaunaMenuBtn.addActionListener(e -> controller.showView("HazardFaunaView"));
         cosmeticMenuBtn.addActionListener(e -> controller.showView("CosmeticView"));
         exitAppBtn.addActionListener(e -> System.exit(0));
-
-        panel.add(buttonPnl, BorderLayout.CENTER);
+                      
+        // panel.add(exitButtonPnl, BorderLayout.SOUTH);
+        panel.add(buttonPnl, BorderLayout.SOUTH);
 
         return panel;
     }
