@@ -43,7 +43,7 @@ public class VehicleView extends JPanel{
         UIManager.put("Label.font", FontLoader.getCustomFont(16f));
 		
         // Hintergrundbild laden mit Debug
-        java.net.URL url = getClass().getResource("/img/background/VehicleBg.png");
+        java.net.URL url = getClass().getResource("/img/background/VehicleScenery.jpg");
         System.out.println("URL = " + url); // Debug
         if (url != null) {
             vehicleBackgroundImage = new ImageIcon(url).getImage();
