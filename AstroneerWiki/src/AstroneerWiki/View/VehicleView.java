@@ -1,16 +1,25 @@
 package AstroneerWiki.View;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.Panel;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import AstroneerWiki.Controller.MenuController;
+import AstroneerWiki.Util.FontLoader;
 
 public class VehicleView extends JPanel{
 	
 	private MenuController controller;
+	private JPanel contentPanel;
 	private StartMenuView mainView;
+	private Image vehicleBackgroundImage;
 	
 	// Konstruktor
 	public VehicleView(StartMenuView mainView, MenuController controller) {
@@ -21,17 +30,44 @@ public class VehicleView extends JPanel{
 		
 		// Menüleiste
 		JPanel menuBar = createVehicleMenuPanel();
+		menuBar.setOpaque(false);
 		add(menuBar, BorderLayout.NORTH);
 		
 		// Content-Bereich
 		JLabel content = new JLabel("Vehicle View", JLabel.CENTER);
+		content.setOpaque(false);
 		add(content, BorderLayout.CENTER);
 		
+		// Font laden
+		UIManager.put("Button.font", FontLoader.getCustomFont(20f));
+        UIManager.put("Label.font", FontLoader.getCustomFont(16f));
+		
+        // Hintergrundbild laden mit Debug
+        java.net.URL url = getClass().getResource("/img/background/VehicleBg.png");
+        System.out.println("URL = " + url); // Debug
+        if (url != null) {
+            vehicleBackgroundImage = new ImageIcon(url).getImage();
+        } else {
+            System.err.println("❌ Hintergrundbild konnte nicht geladen werden!");
+        }
+            
+    }
+	
+	// Hintergrund zeichnen
+	@Override
+	protected void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		if (vehicleBackgroundImage != null) {
+			g.drawImage(vehicleBackgroundImage, 0, 0, getWidth(), getHeight(), this);
+		}
 	}
+	
 	
 	// Button-Leiste
 	private JPanel createVehicleMenuPanel() {
 		JPanel buttonPnl = new JPanel();
+		buttonPnl.setOpaque(false);
+		
 			
 		JButton planetMenuBtn = new JButton("Planets");
 		JButton resourceMenuBtn = new JButton("Resources");
@@ -55,6 +91,7 @@ public class VehicleView extends JPanel{
 		buttonPnl.add(hazardFaunaMenuBtn);
 		buttonPnl.add(cosmeticMenuBtn);
 		buttonPnl.add(exitAppBtn);
+		
 			
 		// Aktionen der Buttons über den Controller steuern
 		startMenuBtn.addActionListener(e -> controller.showView("StartMenu"));
@@ -67,6 +104,7 @@ public class VehicleView extends JPanel{
         hazardFaunaMenuBtn.addActionListener(e -> controller.showView("HazardFaunaView"));
         cosmeticMenuBtn.addActionListener(e -> controller.showView("CosmeticView"));
         exitAppBtn.addActionListener(e -> System.exit(0));
+        
 
         return buttonPnl;
     }

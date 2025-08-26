@@ -22,47 +22,26 @@ public class StartMenuView extends JFrame {
     private JPanel contentPanel;
     private CardLayout cardLayout;
     private MenuController controller;
-    private Image backgroundImage;
 
     // Singleton
     private StartMenuView() {
         setTitle("Astroneer Wiki");
         setSize(1920, 1080);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        // Custom Font für gesa
+
+        // Custom Font für global
         UIManager.put("Button.font", FontLoader.getCustomFont(20f));
         UIManager.put("Label.font", FontLoader.getCustomFont(16f));
 
-        // Hintergrundbild laden mit Debug
-        java.net.URL url = getClass().getResource("/img/background/StartMenuBg.jpg");
-        System.out.println("URL = " + url); // Debug
-        if (url != null) {
-            backgroundImage = new ImageIcon(url).getImage();
-        } else {
-            System.err.println("❌ Hintergrundbild konnte nicht geladen werden!");
-        }
-
         // CardLayout für alle Views
         cardLayout = new CardLayout();
-
-        // Panel mit Hintergrund
-        contentPanel = new JPanel(cardLayout) {
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                if (backgroundImage != null) {
-                    g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
-                }
-            }
-        };
-
+        contentPanel = new JPanel(cardLayout); // ⚠️ kein Hintergrund mehr hier!
         add(contentPanel, BorderLayout.CENTER);
 
         // Controller initialisieren
         controller = new MenuController(this);
 
-        // Startmenü-Panel erstellen
+        // Startmenü-Panel erstellen (hat eigenen Hintergrund!)
         JPanel startMenuPanel = createStartMenuPanel();
 
         // Panels registrieren
@@ -80,9 +59,22 @@ public class StartMenuView extends JFrame {
         showCard("StartMenu");
     }
 
-    // Erzeugt das Startmenü-Panel mit allen Buttons
+    // Startmenü mit eigenem Hintergrund
     private JPanel createStartMenuPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new BorderLayout()) {
+            private Image bg = new ImageIcon(
+                getClass().getResource("/img/background/StartMenuBg.jpg")
+            ).getImage();
+
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                if (bg != null) {
+                    g.drawImage(bg, 0, 0, getWidth(), getHeight(), this);
+                }
+            }
+        };
+
         panel.setOpaque(false);
 
         // Titel
@@ -114,7 +106,7 @@ public class StartMenuView extends JFrame {
         buttonPnl.add(hazardFaunaMenuBtn);
         buttonPnl.add(cosmeticMenuBtn);
         buttonPnl.add(exitAppBtn);
-        
+
         // Aktionen
         planetMenuBtn.addActionListener(e -> controller.showView("PlanetView"));
         resourceMenuBtn.addActionListener(e -> controller.showView("ResourceView"));
