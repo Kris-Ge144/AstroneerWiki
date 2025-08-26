@@ -1,16 +1,24 @@
 package AstroneerWiki.View;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import AstroneerWiki.Controller.MenuController;
+import AstroneerWiki.Util.FontLoader;
 
 public class ToolEquipmentView extends JPanel{
 	
 	private MenuController controller;
 	private StartMenuView mainView;
+	private JPanel contentPanel;
+	private Image toolEquipmentBackgroundImage;
 	
 	// Konstruktor
 	public ToolEquipmentView(StartMenuView mainView, MenuController controller) {
@@ -21,17 +29,43 @@ public class ToolEquipmentView extends JPanel{
 		
 		// Menüleiste
 		JPanel menuBar = createToolEquipmentMenuPanel();
+		menuBar.setOpaque(false);
 		add(menuBar, BorderLayout.NORTH);
 		
 		// Content-Bereich
-		JLabel content = new JLabel("Tools & Equipment View", JLabel.CENTER);
+		JLabel content = new JLabel("Resource View", JLabel.CENTER);
+		content.setOpaque(false);
 		add(content, BorderLayout.CENTER);
 		
+		// Font laden
+		UIManager.put("Button.font", FontLoader.getCustomFont(20f));
+		UIManager.put("Label.font", FontLoader.getCustomFont(16f));
+		
+		// Hintergrundbild laden mit Debug
+        java.net.URL url = getClass().getResource("/img/background/GlacioBg.jpg");
+        System.out.println("URL = " + url); // Debug
+        if (url != null) {
+            toolEquipmentBackgroundImage = new ImageIcon(url).getImage();
+        } else {
+            System.err.println("❌ Hintergrundbild konnte nicht geladen werden!");
+        }
+           
 	}
+	
+	// Hintergrund zeichnen
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			if (toolEquipmentBackgroundImage != null) {
+				g.drawImage(toolEquipmentBackgroundImage, 0, 0, getWidth(), getHeight(), this);
+			}
+		}
+		
 	
 	// Button-Leiste
 	private JPanel createToolEquipmentMenuPanel() {
 		JPanel buttonPnl = new JPanel();
+		buttonPnl.setOpaque(false);
 			
 		JButton planetMenuBtn = new JButton("Planets");
 		JButton resourceMenuBtn = new JButton("Resources");

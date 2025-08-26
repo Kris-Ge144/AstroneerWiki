@@ -1,16 +1,24 @@
 package AstroneerWiki.View;
 
 import java.awt.BorderLayout;
+import java.awt.Graphics;
+import java.awt.Image;
+
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
 
 import AstroneerWiki.Controller.MenuController;
+import AstroneerWiki.Util.FontLoader;
 
 public class ResourceView extends JPanel{
 	
 	private MenuController controller;
 	private StartMenuView mainView;
+	private JPanel contentPanel;
+	private Image resourceBackgroundImage;
 	
 	// Konstruktor
 	public ResourceView(StartMenuView mainView, MenuController controller) {
@@ -21,17 +29,43 @@ public class ResourceView extends JPanel{
 		
 		// Menüleiste
 		JPanel menuBar = createResourceMenuPanel();
+		menuBar.setOpaque(false);
 		add(menuBar, BorderLayout.NORTH);
 		
 		// Content-Bereich
-		JLabel content = new JLabel("Resources View", JLabel.CENTER);
+		JLabel content = new JLabel("Resource View", JLabel.CENTER);
+		content.setOpaque(false);
 		add(content, BorderLayout.CENTER);
 		
+		// Font laden
+		UIManager.put("Button.font", FontLoader.getCustomFont(20f));
+		UIManager.put("Label.font", FontLoader.getCustomFont(16f));
+		
+		// Hintergrundbild laden mit Debug
+        java.net.URL url = getClass().getResource("/img/background/CaveResource.png");
+        System.out.println("URL = " + url); // Debug
+        if (url != null) {
+            resourceBackgroundImage = new ImageIcon(url).getImage();
+        } else {
+            System.err.println("❌ Hintergrundbild konnte nicht geladen werden!");
+        }
+           
 	}
+	
+	// Hintergrund zeichnen
+		@Override
+		protected void paintComponent(Graphics g) {
+			super.paintComponent(g);
+			if (resourceBackgroundImage != null) {
+				g.drawImage(resourceBackgroundImage, 0, 0, getWidth(), getHeight(), this);
+			}
+		}
+		
 	
 	// Button-Leiste
 	private JPanel createResourceMenuPanel() {
 		JPanel buttonPnl = new JPanel();
+		buttonPnl.setOpaque(false);
 			
 		JButton planetMenuBtn = new JButton("Planets");
 		JButton resourceMenuBtn = new JButton("Resources");
