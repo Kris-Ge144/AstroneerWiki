@@ -6,6 +6,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridLayout;
 import java.awt.Image;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
@@ -14,8 +16,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
+import javax.swing.text.Highlighter.Highlight;
 
 import AstroneerWiki.Controller.MenuController;
+import AstroneerWiki.Model.HighlightButtonModel;
+import AstroneerWiki.Util.ButtonFactory;
 import AstroneerWiki.Util.ButtonLoader;
 import AstroneerWiki.Util.FontLoader;
 
@@ -25,6 +30,8 @@ public class StartMenuView extends JFrame {
     private JPanel contentPanel;
     private CardLayout cardLayout;
     private MenuController controller;
+    private HighlightButtonModel buttonHighlighter;
+    private Map<String, ButtonLoader> viewButtonMap;
 
     // Buttons
     private ButtonLoader planetMenuBtn;
@@ -42,25 +49,25 @@ public class StartMenuView extends JFrame {
     private StartMenuView() {
         setTitle("Astroneer Wiki");
         setSize(1920, 1080);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);       
 
         // Custom Font für global
         UIManager.put("Button.font", FontLoader.getCustomFont(20f));
         UIManager.put("Label.font", FontLoader.getCustomFont(16f));
+        
+        // Controller initialisieren
+        controller = new MenuController(this, buttonHighlighter, viewButtonMap);
 
         // CardLayout für alle Views
         cardLayout = new CardLayout();
         contentPanel = new JPanel(cardLayout); // ⚠️ kein Hintergrund mehr hier!
         add(contentPanel, BorderLayout.CENTER);
 
-        // Controller initialisieren
-        controller = new MenuController(this);
-
         // Startmenü-Panel erstellen (hat eigenen Hintergrund!)
         JPanel startMenuPanel = createStartMenuPanel();
 
         // Panels registrieren
-        contentPanel.add(startMenuPanel, "StartMenu");
+        contentPanel.add(startMenuPanel, "StartView");
         contentPanel.add(new PlanetView(this, controller), "PlanetView");
         contentPanel.add(new VehicleView(this, controller), "VehicleView");
         contentPanel.add(new ResourceView(this, controller), "ResourceView");
@@ -69,9 +76,27 @@ public class StartMenuView extends JFrame {
         contentPanel.add(new ResearchView(this, controller), "ResearchView");
         contentPanel.add(new HazardFaunaView(this, controller), "HazardFaunaView");
         contentPanel.add(new CosmeticView(this, controller), "CosmeticView");
+        
+        // Highlight-Modell erstellen
+        buttonHighlighter = new HighlightButtonModel(
+        		planetMenuBtn, resourceMenuBtn, vehicleMenuBtn,
+        		baseBuildingMenuBtn, toolEquipmentMenuBtn, researchMenuBtn,
+        		hazardFaunaMenuBtn, cosmeticMenuBtn, exitAppBtn
+        );
+     
+        // Map für View-zu-Button
+        viewButtonMap = new HashMap<>();
+        viewButtonMap.put("PlanetView", planetMenuBtn);
+        viewButtonMap.put("ResourceView", resourceMenuBtn);
+        viewButtonMap.put("VehicleView", vehicleMenuBtn);
+        viewButtonMap.put("BaseBuildingView", baseBuildingMenuBtn);
+        viewButtonMap.put("ToolEquipmentView", toolEquipmentMenuBtn);
+        viewButtonMap.put("ResearchView", researchMenuBtn);
+        viewButtonMap.put("HazardFaunaView", hazardFaunaMenuBtn);
+        viewButtonMap.put("CosmeticView", cosmeticMenuBtn);
 
         // Standardmäßig Startmenü anzeigen
-        showCard("StartMenu");
+        showCard("StartView");
     }
 
     // Startmenü mit eigenem Hintergrund
@@ -89,7 +114,7 @@ public class StartMenuView extends JFrame {
                 }
             }
         };
-
+              
         panel.setOpaque(false);
 
         // Titel
@@ -102,15 +127,15 @@ public class StartMenuView extends JFrame {
         buttonPnl.setOpaque(false);
         buttonPnl.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
-        planetMenuBtn = new ButtonLoader("Planets","/img/backgroundButton/PlanetButtonBg.png");
-        resourceMenuBtn = new ButtonLoader("Resources","/img/backgroundButton/ResourceButtonBg.png");
-        vehicleMenuBtn = new ButtonLoader("Vehicles","/img/backgroundButton/VehicleButtonBg.png");
-        baseBuildingMenuBtn = new ButtonLoader("Bases & Buildings","/img/backgroundButton/BaseBuildingButtonBg.jpg");
-        toolEquipmentMenuBtn = new ButtonLoader("Tools & Equipment","/img/backgroundButton/ToolEquipmentButtonBg.png");
-        researchMenuBtn = new ButtonLoader("Research & Bytes","/img/backgroundButton/ResearchButtonBg.jpg");
-        hazardFaunaMenuBtn = new ButtonLoader("Hazards & Fauna","/img/backgroundButton/HazardFaunaButtonBg.jpg");
-        cosmeticMenuBtn = new ButtonLoader("Cosmetics","/img/backgroundButton/CosmeticButtonBg.jpg");
-        exitAppBtn = new ButtonLoader("Exit","/img/backgroundButton/ExitButtonBg.jpg");
+        planetMenuBtn = ButtonFactory.standartPlanetButton();
+        resourceMenuBtn = ButtonFactory.standartResourceButton();
+        vehicleMenuBtn = ButtonFactory.standartVehicleButton();
+        baseBuildingMenuBtn = ButtonFactory.standartBaseBuildingButton();
+        toolEquipmentMenuBtn = ButtonFactory.standartToolEquipmentButton();
+        researchMenuBtn = ButtonFactory.standartResearchButton();
+        hazardFaunaMenuBtn = ButtonFactory.standartHazardFaunaButton();
+        cosmeticMenuBtn = ButtonFactory.standartCosmeticButton();
+        exitAppBtn = ButtonFactory.standartExitButton();
         
         // Buttons hinzufügen
         buttonPnl.add(planetMenuBtn);
@@ -121,9 +146,8 @@ public class StartMenuView extends JFrame {
         buttonPnl.add(researchMenuBtn);
         buttonPnl.add(hazardFaunaMenuBtn);
         buttonPnl.add(cosmeticMenuBtn);
-        
         buttonPnl.add(exitAppBtn);
-
+        
         // Aktionen
         planetMenuBtn.addActionListener(e -> controller.showView("PlanetView"));
         resourceMenuBtn.addActionListener(e -> controller.showView("ResourceView"));
@@ -140,7 +164,7 @@ public class StartMenuView extends JFrame {
 
         return panel;
     }
-
+       			    
     // Methode, um Panels zu wechseln
     public void showCard(String name) {
         cardLayout.show(contentPanel, name);
@@ -152,7 +176,7 @@ public class StartMenuView extends JFrame {
             instance = new StartMenuView();
         }
         return instance;
-    }
+    	}
 
     // Main zum Testen
     public static void main(String[] args) {
@@ -161,4 +185,5 @@ public class StartMenuView extends JFrame {
         });
     }
 }
+
 
