@@ -32,18 +32,9 @@ public class StartMenuView extends JFrame {
     private MenuController controller;
     private HighlightButtonModel buttonHighlighter;
     private Map<String, ButtonLoader> viewButtonMap;
-
-    // Buttons
-    private ButtonLoader planetMenuBtn;
-    private ButtonLoader resourceMenuBtn;
-    private ButtonLoader vehicleMenuBtn;
-    private ButtonLoader baseBuildingMenuBtn;
-    private ButtonLoader toolEquipmentMenuBtn;
-    private ButtonLoader researchMenuBtn;
-    private ButtonLoader hazardFaunaMenuBtn;
-    private ButtonLoader cosmeticMenuBtn;
-    private ButtonLoader exitAppBtn;
-    
+    private ButtonLoader planetMenuBtn, resourceMenuBtn, vehicleMenuBtn,
+    						baseBuildingMenuBtn, toolEquipmentMenuBtn, researchMenuBtn,
+    						hazardFaunaMenuBtn, cosmeticMenuBtn, exitAppBtn;
     
     // Singleton
     private StartMenuView() {
@@ -75,7 +66,7 @@ public class StartMenuView extends JFrame {
         contentPanel.add(new ToolEquipmentView(this, controller), "ToolEquipmentView");
         contentPanel.add(new ResearchView(this, controller), "ResearchView");
         contentPanel.add(new HazardFaunaView(this, controller), "HazardFaunaView");
-        contentPanel.add(new CosmeticView(this, controller), "CosmeticView");
+        contentPanel.add(new CosmeticView(this, controller), "CosmeticView"); 
         
         // Highlight-Modell erstellen
         buttonHighlighter = new HighlightButtonModel(
@@ -95,7 +86,7 @@ public class StartMenuView extends JFrame {
         viewButtonMap.put("HazardFaunaView", hazardFaunaMenuBtn);
         viewButtonMap.put("CosmeticView", cosmeticMenuBtn);
 
-        // Standardmäßig Startmenü anzeigen
+        controller = new MenuController(this, buttonHighlighter, viewButtonMap);
         showCard("StartView");
     }
 

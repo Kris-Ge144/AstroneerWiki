@@ -26,27 +26,19 @@ public class PlanetView extends JPanel {
     private Image planetBackgroundImage;
     private HighlightButtonModel buttonHighlighter;
     private Map<String, ButtonLoader> viewButtonMap;
-
-    // Buttons
-    private ButtonLoader startMenuBtn;
-    private ButtonLoader planetMenuBtn;
-    private ButtonLoader resourceMenuBtn;
-    private ButtonLoader vehicleMenuBtn;
-    private ButtonLoader baseBuildingMenuBtn;
-    private ButtonLoader toolEquipmentMenuBtn;
-    private ButtonLoader researchMenuBtn;
-    private ButtonLoader hazardFaunaMenuBtn;
-    private ButtonLoader cosmeticMenuBtn;
-    private ButtonLoader exitAppBtn;
+    private ButtonLoader startMenuBtn, planetMenuBtn, resourceMenuBtn, vehicleMenuBtn, 
+    						baseBuildingMenuBtn, toolEquipmentMenuBtn, researchMenuBtn,
+    						hazardFaunaMenuBtn, cosmeticMenuBtn, exitAppBtn;
 
     public PlanetView(StartMenuView mainView, MenuController controller) {
         this.mainView = mainView;
         this.controller = controller;
 
         setLayout(new BorderLayout());
-
-        // Buttons erstellen
-        createButtons();
+        createButtons(); // Buttons erstellen
+        
+        UIManager.put("Button.font", FontLoader.getCustomFont(20f));
+        UIManager.put("Label.font", FontLoader.getCustomFont(16f));
 
         // Highlight-Modell
         buttonHighlighter = new HighlightButtonModel(
@@ -75,11 +67,7 @@ public class PlanetView extends JPanel {
         JLabel content = new JLabel("Planet View", JLabel.CENTER);
         content.setOpaque(false);
         add(content, BorderLayout.CENTER);
-
-        // Fonts
-        UIManager.put("Button.font", FontLoader.getCustomFont(20f));
-        UIManager.put("Label.font", FontLoader.getCustomFont(16f));
-
+        
         // Hintergrundbild laden
         java.net.URL url = getClass().getResource("/img/background/PlanetsBackground.jpg");
         System.out.println("URL = " + url); // Debug
